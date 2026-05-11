@@ -1,4 +1,4 @@
-package com.turkcell.ticketapp.login
+package com.turkcell.ticketapp.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    viewModel: LoginViewModel = koinViewModel()
+fun RegisterScreen(
+    onRegisterSuccess: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    viewModel: RegisterViewModel = koinViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -35,7 +35,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Giris Yap",
+            text = "Kayit Ol",
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -63,7 +63,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { viewModel.login(onSuccess = onLoginSuccess) },
+            onClick = { viewModel.register(onSuccess = onRegisterSuccess) },
             modifier = Modifier.fillMaxWidth(),
             enabled = !viewModel.isLoading
         ) {
@@ -73,17 +73,17 @@ fun LoginScreen(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text("Giris Yap")
+                Text("Kayit Ol")
             }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         TextButton(
-            onClick = onNavigateToRegister,
+            onClick = onNavigateToLogin,
             enabled = !viewModel.isLoading
         ) {
-            Text("Hesabin yok mu? Kayit ol")
+            Text("Hesabin var mi? Giris yap")
         }
 
         viewModel.errorMessage?.let { message ->

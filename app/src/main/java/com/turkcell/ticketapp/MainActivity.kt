@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.turkcell.core.ui.theme.TicketAppTheme
-import com.turkcell.ticketapp.login.LoginScreen
+import com.turkcell.ticketapp.navigation.AppNavHost
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
            TicketAppTheme{
                Surface(modifier = Modifier.fillMaxSize()) {
-                   LoginScreen()
+                   AppNavHost()
                }
            }
         }

@@ -1,4 +1,4 @@
-package com.turkcell.ticketapp.login
+package com.turkcell.ticketapp.register
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.turkcell.core.domain.AuthRepository
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+class RegisterViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -33,20 +33,20 @@ class LoginViewModel(
         password = value
     }
 
-    fun login(onSuccess: () -> Unit) {
+    fun register(onSuccess: () -> Unit) {
         if (isLoading) return
 
         viewModelScope.launch {
             isLoading = true
             errorMessage = null
 
-            authRepository.login(email, password)
+            authRepository.register(email, password)
                 .onSuccess {
-                    Log.d("LoginScreen", "Giris yapildi")
+                    Log.d("RegisterScreen", "Kayit yapildi")
                     onSuccess()
                 }
                 .onFailure { error ->
-                    errorMessage = error.message ?: "Giris basarisiz oldu"
+                    errorMessage = error.message ?: "Kayit basarisiz oldu"
                 }
 
             isLoading = false

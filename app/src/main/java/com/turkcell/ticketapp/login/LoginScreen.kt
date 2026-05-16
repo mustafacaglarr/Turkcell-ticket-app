@@ -35,7 +35,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Giris Yap",
+            text = "Giriş Yap",
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -55,7 +55,7 @@ fun LoginScreen(
             value = viewModel.password,
             onValueChange = viewModel::onPasswordChange,
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Sifre") },
+            label = { Text("Şifre") },
             singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
@@ -73,7 +73,7 @@ fun LoginScreen(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text("Giris Yap")
+                Text("Giriş Yap")
             }
         }
 
@@ -83,7 +83,7 @@ fun LoginScreen(
             onClick = onNavigateToRegister,
             enabled = !viewModel.isLoading
         ) {
-            Text("Hesabin yok mu? Kayit ol")
+            Text("Hesabın yok mu? Kayıt ol")
         }
 
         viewModel.errorMessage?.let { message ->

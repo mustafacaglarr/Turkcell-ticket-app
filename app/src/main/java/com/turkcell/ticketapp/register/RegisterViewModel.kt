@@ -42,11 +42,11 @@ class RegisterViewModel(
 
             authRepository.register(email, password)
                 .onSuccess {
-                    Log.d("RegisterScreen", "Kayit yapildi")
+                    Log.d("RegisterScreen", "Kayıt yapıldı")
                     onSuccess()
                 }
                 .onFailure { error ->
-                    errorMessage = error.message ?: "Kayit basarisiz oldu"
+                    errorMessage = error.message ?: "Kayıt başarısız oldu"
                 }
 
             isLoading = false

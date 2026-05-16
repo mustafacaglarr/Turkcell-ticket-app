@@ -42,11 +42,11 @@ class LoginViewModel(
 
             authRepository.login(email, password)
                 .onSuccess {
-                    Log.d("LoginScreen", "Giris yapildi")
+                    Log.d("LoginScreen", "Giriş yapıldı")
                     onSuccess()
                 }
                 .onFailure { error ->
-                    errorMessage = error.message ?: "Giris basarisiz oldu"
+                    errorMessage = error.message ?: "Giriş başarısız oldu"
                 }
 
             isLoading = false

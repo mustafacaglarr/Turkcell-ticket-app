@@ -3,6 +3,7 @@ package com.turkcell.data.di
 import com.turkcell.data.network.AuthInterceptor
 import com.turkcell.data.network.TokenAuthenticator
 import com.turkcell.data.remote.AuthApi
+import com.turkcell.data.remote.HomeApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -80,5 +81,9 @@ val networkModule = module {
 
     single<AuthApi> {
         get<Retrofit>().create(AuthApi::class.java)
+    }
+
+    single<HomeApi> {
+        get<Retrofit>().create(HomeApi::class.java)
     }
 }

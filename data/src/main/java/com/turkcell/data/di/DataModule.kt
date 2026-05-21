@@ -1,8 +1,10 @@
 package com.turkcell.data.di
 
 import com.turkcell.core.domain.AuthRepository
+import com.turkcell.core.domain.HomeRepository
 import com.turkcell.data.local.TokenStore
 import com.turkcell.data.repository.AuthRepositoryImpl
+import com.turkcell.data.repository.HomeRepositoryImpl
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -15,5 +17,9 @@ val dataModule = module {
             authApi = get(),
             tokenStore = get()
         )
+    }
+
+    single<HomeRepository> {
+        HomeRepositoryImpl(homeApi = get())
     }
 }

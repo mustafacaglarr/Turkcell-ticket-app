@@ -19,7 +19,7 @@ data class RegisterUiState(
     val isRegistered: Boolean = false
 ) {
     val canSubmit: Boolean
-        get() = email.isNotBlank() && password.length >= 8 && !isLoading
+        get() = email.trim().isValidEmail() && password.length in 8..128 && !isLoading
 }
 
 class RegisterViewModel(
@@ -47,7 +47,7 @@ class RegisterViewModel(
         _state.update { it.copy(isLoading = true, errorMessage = null) }
 
         viewModelScope.launch {
-            authRepository.register(current.email, current.password)
+            authRepository.register(current.email.trim(), current.password)
                 .onSuccess {
                     _state.update { state ->
                         state.copy(isLoading = false, isRegistered = true)
@@ -76,3 +76,6 @@ internal fun Throwable.toUserMessage(): String = when (this) {
     is NetworkException -> "İnternet bağlantısı yok"
     else -> message ?: "Bilinmeyen bir hata oluştu."
 }
+
+private fun String.isValidEmail(): Boolean =
+    matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"))

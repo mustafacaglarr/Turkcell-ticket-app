@@ -1,5 +1,6 @@
 package com.turkcell.ticketapp.di
 
+import com.turkcell.ticketapp.eventdetail.EventDetailViewModel
 import com.turkcell.ticketapp.home.HomeViewModel
 import com.turkcell.ticketapp.login.LoginViewModel
 import com.turkcell.ticketapp.register.RegisterViewModel
@@ -20,5 +21,9 @@ val appModule = module {
             eventRepository = get(),
             ticketRepository = get()
         )
+    }
+
+    viewModel {
+        EventDetailViewModel(eventRepository = get())
     }
 }

@@ -10,5 +10,5 @@ interface EventApi {
     suspend fun getEvents(@Query("upcoming") upcoming: Boolean = true): List<EventDto>
 
     @GET("/events/{id}")
-    suspend fun getEventDetail(@Path("id") id: String): EventDto
+    suspend fun getEvent(@Path("id") id: String): EventDto
 }

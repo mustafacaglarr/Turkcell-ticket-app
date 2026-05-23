@@ -12,7 +12,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.turkcell.core.domain.auth.AuthRepository
+import com.turkcell.ticketapp.eventdetail.EventDetailScreen
 import com.turkcell.ticketapp.home.HomeScreen
 import com.turkcell.ticketapp.login.LoginScreen
 import com.turkcell.ticketapp.register.RegisterScreen
@@ -49,7 +51,16 @@ private fun AuthedNavHost(navController: NavHostController) {
         startDestination = Home
     ) {
         composable<Home> {
-            HomeScreen()
+            HomeScreen(
+                onEventClick = { eventId ->
+                    navController.navigate(EventDetail(eventId))
+                }
+            )
+        }
+
+        composable<EventDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<EventDetail>()
+            EventDetailScreen(eventId = route.id)
         }
     }
 }

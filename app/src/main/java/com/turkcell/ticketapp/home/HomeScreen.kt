@@ -1,6 +1,7 @@
 package com.turkcell.ticketapp.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
+    onEventClick: (String) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -77,7 +79,8 @@ fun HomeScreen(
                 EventsRow(
                     isLoading = state.isEventsLoading,
                     error = state.eventsError,
-                    events = state.events
+                    events = state.events,
+                    onEventClick = onEventClick
                 )
             }
 
@@ -124,7 +127,8 @@ private fun SectionHeader(text: String) {
 private fun EventsRow(
     isLoading: Boolean,
     error: String?,
-    events: List<Event>
+    events: List<Event>,
+    onEventClick: (String) -> Unit
 ) {
     when {
         isLoading -> LoadingBox(height = 220)
@@ -136,7 +140,10 @@ private fun EventsRow(
                 contentPadding = PaddingValues(horizontal = 24.dp)
             ) {
                 items(items = events, key = { it.id }) { event ->
-                    EventCard(event = event)
+                    EventCard(
+                        event = event,
+                        onClick = { onEventClick(event.id) }
+                    )
                 }
             }
         }
@@ -144,11 +151,15 @@ private fun EventsRow(
 }
 
 @Composable
-private fun EventCard(event: Event) {
+private fun EventCard(
+    event: Event,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .width(260.dp)
             .height(300.dp)
+            .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(

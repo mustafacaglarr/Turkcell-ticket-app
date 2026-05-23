@@ -46,7 +46,7 @@ class HomeViewModel(
         _state.update { it.copy(isEventsLoading = true, eventsError = null) }
 
         viewModelScope.launch {
-            eventRepository.getEvents(upcoming = true).fold(
+            eventRepository.getEvents().fold(
                 onSuccess = { events ->
                     _state.update {
                         it.copy(

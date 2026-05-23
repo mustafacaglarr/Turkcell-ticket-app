@@ -3,7 +3,8 @@ package com.turkcell.ticketapp.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.turkcell.core.domain.AuthRepository
-import com.turkcell.ticketapp.login.toUserMessage
+import com.turkcell.data.network.ApiException
+import com.turkcell.data.network.NetworkException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -62,4 +63,16 @@ class RegisterViewModel(
                 }
         }
     }
+}
+
+internal fun Throwable.toUserMessage(): String = when (this) {
+    is ApiException -> when (code) {
+        400 -> "Kayıt bilgilerini kontrol et"
+        409 -> "Bu email adresi zaten kayıtlı"
+        in 500..599 -> "Sunucu şu anda cevap veremiyor"
+        else -> "Kayıt sırasında beklenmeyen bir hata oluştu"
+    }
+
+    is NetworkException -> "İnternet bağlantısı yok"
+    else -> message ?: "Bilinmeyen bir hata oluştu."
 }

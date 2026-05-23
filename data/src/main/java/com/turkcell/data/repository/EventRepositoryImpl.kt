@@ -1,7 +1,7 @@
 package com.turkcell.data.repository
 
-import com.turkcell.core.domain.Event
-import com.turkcell.core.domain.EventRepository
+import com.turkcell.core.domain.event.Event
+import com.turkcell.core.domain.event.EventRepository
 import com.turkcell.data.mapper.toDomain
 import com.turkcell.data.remote.EventApi
 import com.turkcell.data.util.runCatchingApi

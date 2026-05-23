@@ -1,8 +1,8 @@
 package com.turkcell.data.mapper
 
-import com.turkcell.core.domain.Event
-import com.turkcell.core.domain.TicketType
-import com.turkcell.core.domain.UserTicket
+import com.turkcell.core.domain.event.Event
+import com.turkcell.core.domain.event.TicketType
+import com.turkcell.core.domain.ticket.UserTicket
 import com.turkcell.data.dto.EventDto
 import com.turkcell.data.dto.TicketTypeDto
 import com.turkcell.data.dto.UserTicketDto

@@ -1,9 +1,9 @@
 package com.turkcell.data.repository
 
-import com.turkcell.core.domain.AuthRepository
-import com.turkcell.core.domain.AuthSession
-import com.turkcell.core.domain.User
-import com.turkcell.core.domain.UserRole
+import com.turkcell.core.domain.auth.AuthRepository
+import com.turkcell.core.domain.auth.AuthSession
+import com.turkcell.core.domain.auth.User
+import com.turkcell.core.domain.auth.UserRole
 import com.turkcell.data.dto.CredentialsDto
 import com.turkcell.data.dto.TokenPairDto
 import com.turkcell.data.local.TokenStore

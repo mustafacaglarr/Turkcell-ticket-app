@@ -1,4 +1,4 @@
-package com.turkcell.core.domain
+package com.turkcell.core.domain.ticket
 
 data class UserTicket(
     val id: String,

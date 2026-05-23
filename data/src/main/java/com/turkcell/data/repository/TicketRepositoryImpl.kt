@@ -1,7 +1,7 @@
 package com.turkcell.data.repository
 
-import com.turkcell.core.domain.TicketRepository
-import com.turkcell.core.domain.UserTicket
+import com.turkcell.core.domain.ticket.TicketRepository
+import com.turkcell.core.domain.ticket.UserTicket
 import com.turkcell.data.mapper.toDomain
 import com.turkcell.data.remote.TicketApi
 import com.turkcell.data.util.runCatchingApi

@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.turkcell.core.domain.Event
-import com.turkcell.core.domain.TicketType
-import com.turkcell.core.domain.UserTicket
+import com.turkcell.core.domain.event.Event
+import com.turkcell.core.domain.event.TicketType
+import com.turkcell.core.domain.ticket.UserTicket
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

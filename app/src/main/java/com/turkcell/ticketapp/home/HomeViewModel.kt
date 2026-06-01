@@ -6,6 +6,7 @@ import com.turkcell.core.domain.event.Event
 import com.turkcell.core.domain.event.EventRepository
 import com.turkcell.core.domain.ticket.TicketRepository
 import com.turkcell.core.domain.ticket.UserTicket
+import com.turkcell.ticketapp.common.toTicketUserMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -88,7 +89,7 @@ class HomeViewModel(
                     _state.update {
                         it.copy(
                             isTicketsLoading = false,
-                            ticketsError = error.message ?: "Biletler yüklenemedi."
+                            ticketsError = error.toTicketUserMessage()
                         )
                     }
                 }

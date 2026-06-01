@@ -33,11 +33,14 @@ import androidx.compose.ui.unit.dp
 import com.turkcell.core.domain.event.Event
 import com.turkcell.core.domain.event.TicketType
 import com.turkcell.core.domain.ticket.UserTicket
+import com.turkcell.core.util.DateFormatter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     onEventClick: (String) -> Unit,
+    onMyTicketsClick: () -> Unit,
+    onTicketClick: (String) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -59,11 +62,17 @@ fun HomeScreen(
                 style = MaterialTheme.typography.headlineMedium
             )
 
-            OutlinedButton(
-                onClick = viewModel::loadHome,
-                enabled = !state.isLoading
-            ) {
-                Text("Yenile")
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = onMyTicketsClick) {
+                    Text("Biletlerim")
+                }
+
+                OutlinedButton(
+                    onClick = viewModel::loadHome,
+                    enabled = !state.isLoading
+                ) {
+                    Text("Yenile")
+                }
             }
         }
 
@@ -74,7 +83,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
             item {
-                SectionHeader(text = "Yaklaşan Etkinlikler")
+                SectionHeader(text = "Etkinlikler")
                 Spacer(modifier = Modifier.height(8.dp))
                 EventsRow(
                     isLoading = state.isEventsLoading,
@@ -107,7 +116,10 @@ fun HomeScreen(
             }
 
             items(state.tickets, key = { it.id }) { ticket ->
-                TicketCard(ticket = ticket)
+                TicketCard(
+                    ticket = ticket,
+                    onClick = { onTicketClick(ticket.id) }
+                )
             }
         }
     }
@@ -196,7 +208,7 @@ private fun EventCard(
 
                 if (event.startsAt.isNotBlank()) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = event.startsAt, style = MaterialTheme.typography.bodySmall, maxLines = 1)
+                    Text(text = DateFormatter.format(event.startsAt), style = MaterialTheme.typography.bodySmall, maxLines = 1)
                 }
 
                 if (event.description.isNotBlank()) {
@@ -223,11 +235,15 @@ private fun TicketTypeSummary(ticketType: TicketType) {
 }
 
 @Composable
-private fun TicketCard(ticket: UserTicket) {
+private fun TicketCard(
+    ticket: UserTicket,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
+            .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -248,7 +264,7 @@ private fun TicketCard(ticket: UserTicket) {
 
             ticket.eventStartsAt?.let { startsAt ->
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = startsAt, style = MaterialTheme.typography.bodySmall)
+                Text(text = DateFormatter.format(startsAt), style = MaterialTheme.typography.bodySmall)
             }
 
             Spacer(modifier = Modifier.height(8.dp))

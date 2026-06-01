@@ -43,3 +43,15 @@ internal fun Throwable.toPurchaseUserMessage(): String = when (this) {
     is NetworkException -> "İnternet bağlantısı yok"
     else -> message ?: "Bilinmeyen bir hata oluştu."
 }
+
+internal fun Throwable.toTicketUserMessage(): String = when (this) {
+    is ApiException -> when (code) {
+        403 -> "Bu bilete erişim yetkin yok"
+        404 -> "Bilet bulunamadı"
+        in 500..599 -> "Sunucu şu anda cevap veremiyor"
+        else -> "Biletler yüklenirken beklenmeyen bir hata oluştu"
+    }
+
+    is NetworkException -> "İnternet bağlantısı yok"
+    else -> message ?: "Bilinmeyen bir hata oluştu."
+}

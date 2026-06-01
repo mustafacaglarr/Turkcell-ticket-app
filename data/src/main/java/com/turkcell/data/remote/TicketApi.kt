@@ -9,5 +9,5 @@ interface TicketApi {
     suspend fun getMyTickets(): List<UserTicketDto>
 
     @GET("/me/tickets/{id}")
-    suspend fun getMyTicketDetail(@Path("id") id: String): UserTicketDto
+    suspend fun getTicket(@Path("id") id: String): UserTicketDto
 }

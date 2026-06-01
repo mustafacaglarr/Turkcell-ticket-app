@@ -13,7 +13,7 @@ class TicketRepositoryImpl(
         ticketApi.getMyTickets()
     }.map { tickets -> tickets.map { it.toDomain() } }
 
-    override suspend fun getMyTicketDetail(id: String): Result<UserTicket> = runCatchingApi {
-        ticketApi.getMyTicketDetail(id)
+    override suspend fun getTicket(id: String): Result<UserTicket> = runCatchingApi {
+        ticketApi.getTicket(id)
     }.map { ticket -> ticket.toDomain() }
 }

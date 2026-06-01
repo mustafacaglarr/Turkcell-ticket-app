@@ -2,5 +2,5 @@ package com.turkcell.core.domain.ticket
 
 interface TicketRepository {
     suspend fun getMyTickets(): Result<List<UserTicket>>
-    suspend fun getMyTicketDetail(id: String): Result<UserTicket>
+    suspend fun getTicket(id: String): Result<UserTicket>
 }

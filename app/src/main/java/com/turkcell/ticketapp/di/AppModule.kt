@@ -19,7 +19,10 @@ val appModule = module {
     }
 
     viewModel {
-        HomeViewModel(eventRepository = get())
+        HomeViewModel(
+            eventRepository = get(),
+            authRepository = get()
+        )
     }
 
     viewModel {

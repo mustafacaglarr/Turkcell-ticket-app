@@ -71,6 +71,10 @@ fun HomeScreen(
                 ) {
                     Text("Yenile")
                 }
+
+                OutlinedButton(onClick = viewModel::logout) {
+                    Text("Çıkış")
+                }
             }
         }
 

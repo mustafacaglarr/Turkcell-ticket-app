@@ -19,10 +19,7 @@ val appModule = module {
     }
 
     viewModel {
-        HomeViewModel(
-            eventRepository = get(),
-            ticketRepository = get()
-        )
+        HomeViewModel(eventRepository = get())
     }
 
     viewModel {

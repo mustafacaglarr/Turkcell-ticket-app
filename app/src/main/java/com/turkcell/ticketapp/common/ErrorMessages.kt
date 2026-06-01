@@ -5,7 +5,7 @@ import com.turkcell.data.network.NetworkException
 
 internal fun Throwable.toLoginUserMessage(): String = when (this) {
     is ApiException -> when (code) {
-        401 -> "Email veya şifre hatalı"
+        400, 401 -> "Email veya şifre hatalı"
         in 500..599 -> "Sunucu şu anda cevap veremiyor"
         else -> "Beklenmeyen bir hata oluştu"
     }

@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.turkcell.core.domain.event.Event
 import com.turkcell.core.domain.event.TicketType
-import com.turkcell.core.domain.ticket.UserTicket
 import com.turkcell.core.util.DateFormatter
 import org.koin.androidx.compose.koinViewModel
 
@@ -40,7 +39,6 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     onEventClick: (String) -> Unit,
     onMyTicketsClick: () -> Unit,
-    onTicketClick: (String) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -68,8 +66,8 @@ fun HomeScreen(
                 }
 
                 OutlinedButton(
-                    onClick = viewModel::loadHome,
-                    enabled = !state.isLoading
+                    onClick = viewModel::loadEvents,
+                    enabled = !state.isEventsLoading
                 ) {
                     Text("Yenile")
                 }
@@ -90,35 +88,6 @@ fun HomeScreen(
                     error = state.eventsError,
                     events = state.events,
                     onEventClick = onEventClick
-                )
-            }
-
-            item {
-                SectionHeader(text = "Biletlerim")
-            }
-
-            if (state.isTicketsLoading) {
-                item {
-                    LoadingBox(height = 120)
-                }
-            }
-
-            state.ticketsError?.let { error ->
-                item {
-                    ErrorText(message = error)
-                }
-            }
-
-            if (!state.isTicketsLoading && state.tickets.isEmpty() && state.ticketsError == null) {
-                item {
-                    EmptyText(text = "Henüz biletin yok.")
-                }
-            }
-
-            items(state.tickets, key = { it.id }) { ticket ->
-                TicketCard(
-                    ticket = ticket,
-                    onClick = { onTicketClick(ticket.id) }
                 )
             }
         }
@@ -232,48 +201,6 @@ private fun TicketTypeSummary(ticketType: TicketType) {
         style = MaterialTheme.typography.bodySmall,
         maxLines = 1
     )
-}
-
-@Composable
-private fun TicketCard(
-    ticket: UserTicket,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = ticket.eventName ?: "Bilet",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-
-            ticket.ticketTypeName?.let { ticketTypeName ->
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = ticketTypeName, style = MaterialTheme.typography.bodyMedium)
-            }
-
-            ticket.eventVenue?.let { venue ->
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = venue, style = MaterialTheme.typography.bodyMedium)
-            }
-
-            ticket.eventStartsAt?.let { startsAt ->
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = DateFormatter.format(startsAt), style = MaterialTheme.typography.bodySmall)
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Durum: ${ticket.status}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
 }
 
 @Composable

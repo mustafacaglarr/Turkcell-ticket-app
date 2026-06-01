@@ -59,9 +59,6 @@ private fun AuthedNavHost(navController: NavHostController) {
                 },
                 onMyTicketsClick = {
                     navController.navigate(MyTickets)
-                },
-                onTicketClick = { ticketId ->
-                    navController.navigate(TicketDetail(ticketId))
                 }
             )
         }
@@ -71,8 +68,9 @@ private fun AuthedNavHost(navController: NavHostController) {
             EventDetailScreen(
                 eventId = route.id,
                 onPaymentSuccess = {
-                    navController.navigate(Home) {
-                        popUpTo(Home) { inclusive = true }
+                    navController.navigate(MyTickets) {
+                        popUpTo(Home)
+                        launchSingleTop = true
                     }
                 }
             )

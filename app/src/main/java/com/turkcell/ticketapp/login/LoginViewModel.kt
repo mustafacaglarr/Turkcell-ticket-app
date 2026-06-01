@@ -3,6 +3,7 @@ package com.turkcell.ticketapp.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.turkcell.core.domain.auth.AuthRepository
+import com.turkcell.ticketapp.common.StringProvider
 import com.turkcell.ticketapp.common.toLoginUserMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,8 @@ data class LoginUiState(
 }
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val strings: StringProvider
 ) : ViewModel() {
     private val _state = MutableStateFlow(LoginUiState())
     val state: StateFlow<LoginUiState> = _state.asStateFlow()
@@ -56,7 +58,7 @@ class LoginViewModel(
                     _state.update { state ->
                         state.copy(
                             isLoading = false,
-                            errorMessage = error.toLoginUserMessage()
+                            errorMessage = error.toLoginUserMessage(strings)
                         )
                     }
                 }

@@ -30,12 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.turkcell.core.domain.ticket.UserTicket
 import com.turkcell.core.util.DateFormatter
+import com.turkcell.ticketapp.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -73,7 +75,7 @@ private fun TicketDetailContent(ticket: UserTicket?) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Bilet Detayı",
+            text = stringResource(R.string.ticket_detail_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.SemiBold
         )
@@ -84,27 +86,36 @@ private fun TicketDetailContent(ticket: UserTicket?) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = ticket.eventName ?: "Bilet",
+                    text = ticket.eventName ?: stringResource(R.string.ticket_fallback),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
 
                 ticket.ticketTypeName?.let {
-                    Text(text = "Bilet türü: $it", style = MaterialTheme.typography.bodyMedium)
-                }
-
-                ticket.eventVenue?.let {
-                    Text(text = "Mekan: $it", style = MaterialTheme.typography.bodyMedium)
-                }
-
-                ticket.eventStartsAt?.let {
                     Text(
-                        text = "Tarih: ${DateFormatter.format(it)}",
+                        text = stringResource(R.string.ticket_type_label, it),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
 
-                Text(text = "Durum: ${ticket.status}", style = MaterialTheme.typography.bodyMedium)
+                ticket.eventVenue?.let {
+                    Text(
+                        text = stringResource(R.string.venue_label, it),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                ticket.eventStartsAt?.let {
+                    Text(
+                        text = stringResource(R.string.date_label, DateFormatter.format(it)),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.status_label, ticket.status),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
 
@@ -118,7 +129,7 @@ private fun TicketDetailContent(ticket: UserTicket?) {
                 if (ticket.qrCode.isNotBlank()) {
                     Image(
                         bitmap = qrBitmap.asImageBitmap(),
-                        contentDescription = "Bilet QR kodu",
+                        contentDescription = stringResource(R.string.ticket_qr_content_description),
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(1f)
@@ -131,7 +142,7 @@ private fun TicketDetailContent(ticket: UserTicket?) {
                     )
                 } else {
                     Text(
-                        text = "Bu bilet için QR kod bulunamadı.",
+                        text = stringResource(R.string.empty_qr_code),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

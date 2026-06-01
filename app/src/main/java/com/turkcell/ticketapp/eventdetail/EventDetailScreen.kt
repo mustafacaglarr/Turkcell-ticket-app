@@ -26,11 +26,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.turkcell.core.domain.event.Event
 import com.turkcell.core.domain.event.TicketType
 import com.turkcell.core.util.DateFormatter
+import com.turkcell.ticketapp.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -158,7 +160,7 @@ private fun EventContent(
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 24.dp),
-                text = "Bilet Türleri",
+                text = stringResource(R.string.ticket_types_title),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -168,7 +170,7 @@ private fun EventContent(
             item {
                 Text(
                     modifier = Modifier.padding(horizontal = 24.dp),
-                    text = "Bu etkinlik için bilet türü bulunamadı.",
+                    text = stringResource(R.string.empty_ticket_types),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -190,7 +192,7 @@ private fun EventContent(
                     .padding(24.dp)
             ) {
                 Text(
-                    text = "Toplam: ${formatPrice(totalCents)}",
+                    text = stringResource(R.string.total_price, formatPrice(totalCents)),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -214,7 +216,7 @@ private fun EventContent(
                     if (isCreatingPurchase) {
                         CircularProgressIndicator()
                     } else {
-                        Text("Satın Al")
+                        Text(stringResource(R.string.buy))
                     }
                 }
             }
@@ -250,7 +252,11 @@ private fun TicketTypeRow(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "${ticketType.remaining} / ${ticketType.capacity} kalan",
+                        text = stringResource(
+                            R.string.remaining_capacity,
+                            ticketType.remaining,
+                            ticketType.capacity
+                        ),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
@@ -298,17 +304,23 @@ private fun PaymentConfirmDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Ödeme Onayı")
+            Text(stringResource(R.string.payment_confirm_title))
         },
         text = {
-            Text("${formatPrice(totalCents)} tutarındaki satın alımı onaylıyor musun?")
+            Text(stringResource(R.string.payment_confirm_message, formatPrice(totalCents)))
         },
         confirmButton = {
             TextButton(
                 onClick = onConfirm,
                 enabled = !isPaying
             ) {
-                Text(if (isPaying) "Ödeniyor" else "Öde")
+                Text(
+                    if (isPaying) {
+                        stringResource(R.string.paying)
+                    } else {
+                        stringResource(R.string.pay)
+                    }
+                )
             }
         },
         dismissButton = {
@@ -316,7 +328,7 @@ private fun PaymentConfirmDialog(
                 onClick = onDismiss,
                 enabled = !isPaying
             ) {
-                Text("Vazgeç")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

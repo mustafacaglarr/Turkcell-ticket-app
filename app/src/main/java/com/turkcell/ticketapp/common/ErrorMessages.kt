@@ -2,56 +2,57 @@ package com.turkcell.ticketapp.common
 
 import com.turkcell.data.network.ApiException
 import com.turkcell.data.network.NetworkException
+import com.turkcell.ticketapp.R
 
-internal fun Throwable.toLoginUserMessage(): String = when (this) {
+internal fun Throwable.toLoginUserMessage(strings: StringProvider): String = when (this) {
     is ApiException -> when (code) {
-        400, 401 -> "Email veya şifre hatalı"
-        in 500..599 -> "Sunucu şu anda cevap veremiyor"
-        else -> "Beklenmeyen bir hata oluştu"
+        400, 401 -> strings.get(R.string.error_invalid_credentials)
+        in 500..599 -> strings.get(R.string.error_server_unavailable)
+        else -> strings.get(R.string.error_unexpected)
     }
 
-    is NetworkException -> "İnternet bağlantısı yok"
-    else -> message ?: "Bilinmeyen bir hata oluştu."
+    is NetworkException -> strings.get(R.string.error_no_connection)
+    else -> message ?: strings.get(R.string.error_unknown)
 }
 
-internal fun Throwable.toRegisterUserMessage(): String = when (this) {
+internal fun Throwable.toRegisterUserMessage(strings: StringProvider): String = when (this) {
     is ApiException -> when (code) {
-        400 -> "Kayıt bilgilerini kontrol et"
-        409 -> "Bu email adresi zaten kayıtlı"
-        in 500..599 -> "Sunucu şu anda cevap veremiyor"
-        else -> "Kayıt sırasında beklenmeyen bir hata oluştu"
+        400 -> strings.get(R.string.error_register_invalid)
+        409 -> strings.get(R.string.error_email_taken)
+        in 500..599 -> strings.get(R.string.error_server_unavailable)
+        else -> strings.get(R.string.error_register_unexpected)
     }
 
-    is NetworkException -> "İnternet bağlantısı yok"
-    else -> message ?: "Bilinmeyen bir hata oluştu."
+    is NetworkException -> strings.get(R.string.error_no_connection)
+    else -> message ?: strings.get(R.string.error_unknown)
 }
 
-internal fun Throwable.toPurchaseUserMessage(): String = when (this) {
+internal fun Throwable.toPurchaseUserMessage(strings: StringProvider): String = when (this) {
     is ApiException -> {
         val apiMessage = "${errorMessage.orEmpty()} ${message.orEmpty()}".lowercase()
         when {
-            apiMessage.contains("capacity_exceeded") -> "Stok yetersiz, yenile"
-            apiMessage.contains("already_paid") -> "Bu satın alım zaten ödenmiş"
-            apiMessage.contains("not_purchase_owner") || code == 403 -> "Bu satın alım sana ait değil"
-            code == 404 -> "Satın alım bulunamadı"
-            code == 409 -> "Satın alma işlemi tamamlanamadı"
-            code in 500..599 -> "Sunucu şu anda cevap veremiyor"
-            else -> "Satın alma sırasında beklenmeyen bir hata oluştu"
+            apiMessage.contains("capacity_exceeded") -> strings.get(R.string.error_capacity_exceeded)
+            apiMessage.contains("already_paid") -> strings.get(R.string.error_already_paid)
+            apiMessage.contains("not_purchase_owner") || code == 403 -> strings.get(R.string.error_not_purchase_owner)
+            code == 404 -> strings.get(R.string.error_purchase_not_found)
+            code == 409 -> strings.get(R.string.error_purchase_failed)
+            code in 500..599 -> strings.get(R.string.error_server_unavailable)
+            else -> strings.get(R.string.error_purchase_unexpected)
         }
     }
 
-    is NetworkException -> "İnternet bağlantısı yok"
-    else -> message ?: "Bilinmeyen bir hata oluştu."
+    is NetworkException -> strings.get(R.string.error_no_connection)
+    else -> message ?: strings.get(R.string.error_unknown)
 }
 
-internal fun Throwable.toTicketUserMessage(): String = when (this) {
+internal fun Throwable.toTicketUserMessage(strings: StringProvider): String = when (this) {
     is ApiException -> when (code) {
-        403 -> "Bu bilete erişim yetkin yok"
-        404 -> "Bilet bulunamadı"
-        in 500..599 -> "Sunucu şu anda cevap veremiyor"
-        else -> "Biletler yüklenirken beklenmeyen bir hata oluştu"
+        403 -> strings.get(R.string.error_ticket_forbidden)
+        404 -> strings.get(R.string.error_ticket_not_found)
+        in 500..599 -> strings.get(R.string.error_server_unavailable)
+        else -> strings.get(R.string.error_ticket_unexpected)
     }
 
-    is NetworkException -> "İnternet bağlantısı yok"
-    else -> message ?: "Bilinmeyen bir hata oluştu."
+    is NetworkException -> strings.get(R.string.error_no_connection)
+    else -> message ?: strings.get(R.string.error_unknown)
 }

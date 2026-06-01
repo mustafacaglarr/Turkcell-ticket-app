@@ -8,6 +8,8 @@ import com.turkcell.core.domain.event.TicketType
 import com.turkcell.core.domain.purchase.CreatePurchaseItem
 import com.turkcell.core.domain.purchase.Purchase
 import com.turkcell.core.domain.purchase.PurchaseRepository
+import com.turkcell.ticketapp.R
+import com.turkcell.ticketapp.common.StringProvider
 import com.turkcell.ticketapp.common.toPurchaseUserMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +40,8 @@ data class EventDetailUiState(
 
 class EventDetailViewModel(
     private val eventRepository: EventRepository,
-    private val purchaseRepository: PurchaseRepository
+    private val purchaseRepository: PurchaseRepository,
+    private val strings: StringProvider
 ) : ViewModel() {
     private val _state = MutableStateFlow(EventDetailUiState())
     val state: StateFlow<EventDetailUiState> = _state.asStateFlow()
@@ -71,7 +74,7 @@ class EventDetailViewModel(
                         it.copy(
                             isLoading = false,
                             event = null,
-                            errorMessage = error.message ?: "Etkinlik detayı yüklenemedi."
+                            errorMessage = error.message ?: strings.get(R.string.error_event_detail_load_failed)
                         )
                     }
                 }
@@ -152,7 +155,7 @@ class EventDetailViewModel(
                     _state.update {
                         it.copy(
                             isCreatingPurchase = false,
-                            purchaseErrorMessage = error.toPurchaseUserMessage()
+                            purchaseErrorMessage = error.toPurchaseUserMessage(strings)
                         )
                     }
                     if (eventId != null) {
@@ -196,7 +199,7 @@ class EventDetailViewModel(
                     _state.update {
                         it.copy(
                             isPaying = false,
-                            purchaseErrorMessage = error.toPurchaseUserMessage()
+                            purchaseErrorMessage = error.toPurchaseUserMessage(strings)
                         )
                     }
                 }

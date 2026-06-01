@@ -28,11 +28,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.turkcell.core.domain.event.Event
 import com.turkcell.core.domain.event.TicketType
 import com.turkcell.core.util.DateFormatter
+import com.turkcell.ticketapp.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -56,24 +58,24 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Ana Sayfa",
+                text = stringResource(R.string.home_title),
                 style = MaterialTheme.typography.headlineMedium
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedButton(onClick = onMyTicketsClick) {
-                    Text("Biletlerim")
+                    Text(stringResource(R.string.my_tickets_title))
                 }
 
                 OutlinedButton(
                     onClick = viewModel::loadEvents,
                     enabled = !state.isEventsLoading
                 ) {
-                    Text("Yenile")
+                    Text(stringResource(R.string.refresh))
                 }
 
                 OutlinedButton(onClick = viewModel::logout) {
-                    Text("Çıkış")
+                    Text(stringResource(R.string.logout))
                 }
             }
         }
@@ -85,7 +87,7 @@ fun HomeScreen(
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
             item {
-                SectionHeader(text = "Etkinlikler")
+                SectionHeader(text = stringResource(R.string.events_title))
                 Spacer(modifier = Modifier.height(8.dp))
                 EventsRow(
                     isLoading = state.isEventsLoading,
@@ -118,7 +120,7 @@ private fun EventsRow(
     when {
         isLoading -> LoadingBox(height = 220)
         error != null -> ErrorText(message = error)
-        events.isEmpty() -> EmptyText(text = "Şimdilik hiçbir etkinlik yok.")
+        events.isEmpty() -> EmptyText(text = stringResource(R.string.empty_events))
         else -> {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -201,7 +203,12 @@ private fun EventCard(
 @Composable
 private fun TicketTypeSummary(ticketType: TicketType) {
     Text(
-        text = "${ticketType.name}: ${ticketType.remaining} kalan - ${ticketType.priceCents / 100} TL",
+        text = stringResource(
+            R.string.ticket_type_summary,
+            ticketType.name,
+            ticketType.remaining,
+            ticketType.priceCents / 100
+        ),
         style = MaterialTheme.typography.bodySmall,
         maxLines = 1
     )

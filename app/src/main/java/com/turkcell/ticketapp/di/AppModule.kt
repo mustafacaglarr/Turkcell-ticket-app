@@ -1,6 +1,7 @@
 package com.turkcell.ticketapp.di
 
 import com.turkcell.ticketapp.eventdetail.EventDetailViewModel
+import com.turkcell.ticketapp.common.StringProvider
 import com.turkcell.ticketapp.home.HomeViewModel
 import com.turkcell.ticketapp.login.LoginViewModel
 import com.turkcell.ticketapp.mytickets.MyTicketsViewModel
@@ -10,33 +11,51 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    viewModel {
-        LoginViewModel(authRepository = get())
+    single {
+        StringProvider(context = get())
     }
 
     viewModel {
-        RegisterViewModel(authRepository = get())
+        LoginViewModel(
+            authRepository = get(),
+            strings = get()
+        )
+    }
+
+    viewModel {
+        RegisterViewModel(
+            authRepository = get(),
+            strings = get()
+        )
     }
 
     viewModel {
         HomeViewModel(
             eventRepository = get(),
-            authRepository = get()
+            authRepository = get(),
+            strings = get()
         )
     }
 
     viewModel {
         EventDetailViewModel(
             eventRepository = get(),
-            purchaseRepository = get()
+            purchaseRepository = get(),
+            strings = get()
         )
     }
 
     viewModel {
-        MyTicketsViewModel(ticketRepository = get())
+        MyTicketsViewModel(
+            ticketRepository = get(),
+            strings = get()
+        )
     }
 
     viewModel {
-        TicketDetailViewModel(ticketRepository = get())
+        TicketDetailViewModel(
+            ticketRepository = get(),
+            strings = get()
+        )
     }
 }

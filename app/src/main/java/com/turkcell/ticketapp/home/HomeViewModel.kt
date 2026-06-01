@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.turkcell.core.domain.auth.AuthRepository
 import com.turkcell.core.domain.event.Event
 import com.turkcell.core.domain.event.EventRepository
+import com.turkcell.ticketapp.R
+import com.turkcell.ticketapp.common.StringProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +21,8 @@ data class HomeUiState(
 
 class HomeViewModel(
     private val eventRepository: EventRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val strings: StringProvider
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
@@ -48,7 +51,7 @@ class HomeViewModel(
                     _state.update {
                         it.copy(
                             isEventsLoading = false,
-                            eventsError = error.message ?: "Etkinlikler yüklenemedi."
+                            eventsError = error.message ?: strings.get(R.string.error_events_load_failed)
                         )
                     }
                 }

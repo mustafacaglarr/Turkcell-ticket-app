@@ -22,10 +22,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.turkcell.ticketapp.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -51,7 +53,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Giriş Yap",
+                text = stringResource(R.string.login_title),
                 style = MaterialTheme.typography.headlineMedium
             )
 
@@ -61,7 +63,7 @@ fun LoginScreen(
                 value = state.email,
                 onValueChange = viewModel::onEmailChange,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("E-posta") },
+                label = { Text(stringResource(R.string.email_label)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
@@ -72,7 +74,7 @@ fun LoginScreen(
                 value = state.password,
                 onValueChange = viewModel::onPasswordChange,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("Şifre") },
+                label = { Text(stringResource(R.string.password_label)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
@@ -101,7 +103,7 @@ fun LoginScreen(
                         color = LocalContentColor.current
                     )
                 } else {
-                    Text("Giriş Yap")
+                    Text(stringResource(R.string.login_title))
                 }
             }
 
@@ -111,7 +113,7 @@ fun LoginScreen(
                 onClick = onNavigateToRegister,
                 enabled = !state.isLoading
             ) {
-                Text("Hesabın yok mu? Kayıt ol")
+                Text(stringResource(R.string.navigate_register))
             }
         }
     }

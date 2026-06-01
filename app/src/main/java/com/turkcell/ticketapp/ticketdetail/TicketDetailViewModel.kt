@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.turkcell.core.domain.ticket.TicketRepository
 import com.turkcell.core.domain.ticket.UserTicket
+import com.turkcell.ticketapp.common.StringProvider
 import com.turkcell.ticketapp.common.toTicketUserMessage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ data class TicketDetailUiState(
 )
 
 class TicketDetailViewModel(
-    private val ticketRepository: TicketRepository
+    private val ticketRepository: TicketRepository,
+    private val strings: StringProvider
 ) : ViewModel() {
     private val _state = MutableStateFlow(TicketDetailUiState())
     val state: StateFlow<TicketDetailUiState> = _state.asStateFlow()
@@ -50,7 +52,7 @@ class TicketDetailViewModel(
                         it.copy(
                             isLoading = false,
                             ticket = null,
-                            errorMessage = error.toTicketUserMessage()
+                            errorMessage = error.toTicketUserMessage(strings)
                         )
                     }
                 }

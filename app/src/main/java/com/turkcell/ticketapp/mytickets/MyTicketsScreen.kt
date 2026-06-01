@@ -25,10 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.turkcell.core.domain.ticket.UserTicket
 import com.turkcell.core.util.DateFormatter
+import com.turkcell.ticketapp.R
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +54,7 @@ fun MyTicketsScreen(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Biletlerim",
+                text = stringResource(R.string.my_tickets_title),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.SemiBold
             )
@@ -61,7 +63,7 @@ fun MyTicketsScreen(
                 onClick = viewModel::refresh,
                 enabled = !state.isLoading && !state.isRefreshing
             ) {
-                Text("Yenile")
+                Text(stringResource(R.string.refresh))
             }
         }
 
@@ -80,7 +82,7 @@ fun MyTicketsScreen(
                 )
 
                 state.tickets.isEmpty() -> MessageContent(
-                    message = "Henüz biletin yok.",
+                    message = stringResource(R.string.empty_tickets),
                     isError = false
                 )
 
@@ -124,7 +126,7 @@ private fun TicketCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = ticket.eventName ?: "Bilet",
+                text = ticket.eventName ?: stringResource(R.string.ticket_fallback),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold
             )
@@ -144,7 +146,7 @@ private fun TicketCard(
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Durum: ${ticket.status}",
+                text = stringResource(R.string.status_label, ticket.status),
                 style = MaterialTheme.typography.bodyMedium
             )
         }

@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,12 +36,28 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EventDetailScreen(
     eventId: String,
+    onPaymentSuccess: () -> Unit,
     viewModel: EventDetailViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(eventId) {
         viewModel.loadEvent(eventId)
+    }
+
+    LaunchedEffect(state.paymentCompleted) {
+        if (state.paymentCompleted) {
+            onPaymentSuccess()
+        }
+    }
+
+    if (state.showPaymentDialog) {
+        PaymentConfirmDialog(
+            totalCents = state.purchase?.totalCents ?: state.totalCents,
+            isPaying = state.isPaying,
+            onDismiss = viewModel::dismissPaymentDialog,
+            onConfirm = viewModel::payPurchase
+        )
     }
 
     when {
@@ -49,8 +67,13 @@ fun EventDetailScreen(
             event = state.event,
             selectedQuantities = state.selectedQuantities,
             totalCents = state.totalCents,
+            purchaseErrorMessage = state.purchaseErrorMessage,
+            isCreatingPurchase = state.isCreatingPurchase,
+            isPaying = state.isPaying,
+            canPurchase = state.hasSelection,
             onIncrease = viewModel::increase,
-            onDecrease = viewModel::decrease
+            onDecrease = viewModel::decrease,
+            onCreatePurchase = viewModel::createPurchase
         )
     }
 }
@@ -86,8 +109,13 @@ private fun EventContent(
     event: Event?,
     selectedQuantities: Map<String, Int>,
     totalCents: Int,
+    purchaseErrorMessage: String?,
+    isCreatingPurchase: Boolean,
+    isPaying: Boolean,
+    canPurchase: Boolean,
     onIncrease: (TicketType) -> Unit,
-    onDecrease: (String) -> Unit
+    onDecrease: (String) -> Unit,
+    onCreatePurchase: () -> Unit
 ) {
     if (event == null) return
 
@@ -162,19 +190,32 @@ private fun EventContent(
                     .padding(24.dp)
             ) {
                 Text(
-                    text = "Toplam: ${totalCents / 100} TL",
+                    text = "Toplam: ${formatPrice(totalCents)}",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold
                 )
 
+                if (purchaseErrorMessage != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = purchaseErrorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Button(
-                    onClick = {},
-                    enabled = false,
+                    onClick = onCreatePurchase,
+                    enabled = canPurchase && !isCreatingPurchase && !isPaying,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Satın Al")
+                    if (isCreatingPurchase) {
+                        CircularProgressIndicator()
+                    } else {
+                        Text("Satın Al")
+                    }
                 }
             }
         }
@@ -213,7 +254,7 @@ private fun TicketTypeRow(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
-                        text = "${ticketType.priceCents / 100} TL",
+                        text = formatPrice(ticketType.priceCents),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -246,3 +287,40 @@ private fun TicketTypeRow(
         }
     }
 }
+
+@Composable
+private fun PaymentConfirmDialog(
+    totalCents: Int,
+    isPaying: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text("Ödeme Onayı")
+        },
+        text = {
+            Text("${formatPrice(totalCents)} tutarındaki satın alımı onaylıyor musun?")
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm,
+                enabled = !isPaying
+            ) {
+                Text(if (isPaying) "Ödeniyor" else "Öde")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+                enabled = !isPaying
+            ) {
+                Text("Vazgeç")
+            }
+        }
+    )
+}
+
+private fun formatPrice(priceCents: Int): String =
+    "${priceCents / 100} TL"

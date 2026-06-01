@@ -60,7 +60,14 @@ private fun AuthedNavHost(navController: NavHostController) {
 
         composable<EventDetail> { backStackEntry ->
             val route = backStackEntry.toRoute<EventDetail>()
-            EventDetailScreen(eventId = route.id)
+            EventDetailScreen(
+                eventId = route.id,
+                onPaymentSuccess = {
+                    navController.navigate(Home) {
+                        popUpTo(Home) { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }

@@ -24,6 +24,9 @@ val appModule = module {
     }
 
     viewModel {
-        EventDetailViewModel(eventRepository = get())
+        EventDetailViewModel(
+            eventRepository = get(),
+            purchaseRepository = get()
+        )
     }
 }
